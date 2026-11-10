@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黄宇轩网站 · HYX 超级无敌</title>
+<style>
+:root{
+  --gold:#f7d488;
+  --gold-hi:#fff3cf;
+  --gold-deep:#c8942a;
+  --gold-dark:#6b4c10;
+  --cyan:#37e6ff;
+  --bg:#03040a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{
+  font-family:"Orbitron","Arial Black","Impact","Microsoft YaHei",sans-serif;
+  color:var(--gold);
+  -webkit-font-smoothing:antialiased;
+  cursor:crosshair;
+}
+
+/* ---------- 背景层 ---------- */
+#fx{position:fixed;inset:0;z-index:1}
+
+.grid{
+  position:fixed;inset:-10%;z-index:2;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,214,120,.075) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,214,120,.075) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(ellipse 55% 55% at 50% 50%,transparent 30%,#000 78%);
+          mask-image:radial-gradient(ellipse 55% 55% at 50% 50%,transparent 30%,#000 78%);
+  animation:gridDrift 24s linear infinite;
+}
+@keyframes gridDrift{to{background-position:64px 64px,64px 64px}}
+
+.halo{
+  position:fixed;left:50%;top:50%;z-index:3;pointer-events:none;
+  width:120vmin;height:120vmin;transform:translate(-50%,-50%);
+  background:
+    radial-gradient(circle,rgba(255,200,90,.16) 0%,rgba(255,170,40,.07) 28%,transparent 62%),
+    conic-gradient(from 0deg,transparent 0deg,rgba(255,215,130,.10) 40deg,transparent 90deg,
+                   transparent 180deg,rgba(255,215,130,.10) 220deg,transparent 270deg);
+  animation:haloSpin 26s linear infinite,haloPulse 5.5s ease-in-out infinite;
+  mix-blend-mode:screen;
+}
+@keyframes haloSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes haloPulse{0%,100%{opacity:.75}50%{opacity:1}}
+
+.vignette{
+  position:fixed;inset:0;z-index:6;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.72) 92%);
+}
+.scan{
+  position:fixed;inset:0;z-index:7;pointer-events:none;opacity:.35;
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.045) 0 1px,transparent 1px 3px);
+  animation:scanMove 8s linear infinite;
+}
+@keyframes scanMove{to{transform:translateY(3px)}}
+
+.sweep{
+  position:fixed;left:0;right:0;height:26vh;z-index:7;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(255,214,130,.055),transparent);
+  animation:sweepMove 7s cubic-bezier(.45,0,.55,1) infinite;
+}
+@keyframes sweepMove{0%{top:-30vh}100%{top:110vh}}
+
+/* ---------- 中央核心区：50vw × 50vh ≈ 屏幕 1/4 ---------- */
+.core{
+  position:fixed;left:50%;top:50%;z-index:5;
+  width:50vw;height:50vh;
+  transform:translate(-50%,-50%);
+  display:flex;align-items:center;justify-content:center;
+  perspective:900px;
+}
+.frame{
+  position:relative;width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2vh;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.78),rgba(3,4,10,.5) 66%,transparent 96%);
+  border:1px solid rgba(255,214,130,.22);
+  box-shadow:
+    0 0 60px rgba(255,190,80,.10) inset,
+    0 0 90px rgba(255,180,60,.07),
+    0 0 0 1px rgba(255,214,130,.06);
+  backdrop-filter:blur(2px);
+  animation:frameIn .9s cubic-bezier(.2,.8,.2,1) both .55s;
+}
+@keyframes frameIn{
+  from{opacity:0;transform:scale(.86) rotateX(12deg);filter:blur(6px)}
+  to{opacity:1;transform:scale(1) rotateX(0);filter:blur(0)}
+}
+
+/* 四角科技角标 */
+.corner{position:absolute;width:34px;height:34px;border:2px solid var(--gold);opacity:.9;
+  filter:drop-shadow(0 0 6px rgba(255,200,90,.8))}
+.corner::after{content:"";position:absolute;inset:6px;border:1px solid rgba(255,214,130,.35)}
+.c-tl{top:-2px;left:-2px;border-right:0;border-bottom:0}
+.c-tr{top:-2px;right:-2px;border-left:0;border-bottom:0}
+.c-bl{bottom:-2px;left:-2px;border-right:0;border-top:0}
+.c-br{bottom:-2px;right:-2px;border-left:0;border-top:0}
+
+/* 旋转装饰环 */
+.ring{
+  position:absolute;width:78%;aspect-ratio:1/1;border-radius:50%;
+  border:1px dashed rgba(255,214,130,.18);
+  animation:ringSpin 30s linear infinite;pointer-events:none;
+}
+.ring.b{width:62%;border-style:solid;border-color:rgba(255,214,130,.10) transparent rgba(255,214,130,.10) transparent;animation-duration:18s;animation-direction:reverse}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+
+/* ---------- 主标题 ---------- */
+.twrap{
+  --fs:min(19.5vw,26vh);
+  position:relative;display:flex;align-items:center;justify-content:center;
+  animation:heroBreathe 4.6s ease-in-out infinite 2s;
+}
+@keyframes heroBreathe{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.035)}
+}
+/* 背后金色背光 */
+.tglow{
+  position:absolute;width:190%;height:210%;pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,rgba(255,196,76,.34) 0%,rgba(255,150,20,.14) 34%,transparent 68%),
+    radial-gradient(ellipse at center,rgba(255,240,190,.20) 0%,transparent 42%);
+  filter:blur(14px);
+  animation:glowPulse 4.6s ease-in-out infinite 2s;
+  mix-blend-mode:screen;
+}
+@keyframes glowPulse{0%,100%{opacity:.72;transform:scale(.96)}50%{opacity:1;transform:scale(1.06)}}
+
+.title{
+  position:relative;
+  font-size:var(--fs);
+  line-height:.92;letter-spacing:.045em;font-weight:900;
+  background:linear-gradient(178deg,
+    #ffffff 0%,#fff6d8 16%,#ffd977 32%,#b8801a 49%,
+    #fff3c8 60%,#ffd05a 74%,#8a6412 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-stroke:1px rgba(255,246,214,.55);
+  filter:
+    drop-shadow(0 0 5px rgba(255,236,180,.95))
+    drop-shadow(0 0 26px rgba(255,195,75,.75))
+    drop-shadow(0 0 72px rgba(255,150,20,.5))
+    drop-shadow(0 0 140px rgba(255,120,0,.3));
+}
+/* 字形上掠过的高光 */
+.tshine{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:var(--fs);line-height:.92;letter-spacing:.045em;font-weight:900;
+  color:transparent;pointer-events:none;
+  background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.95) 50%,transparent 58%);
+  background-size:280% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  mix-blend-mode:screen;
+  animation:shineMove 5.5s ease-in-out infinite 2.2s;
+}
+@keyframes shineMove{
+  0%,72%,100%{background-position:200% 0}
+  84%{background-position:-80% 0}
+}
+
+.title span{display:inline-block;animation:letterIn .85s cubic-bezier(.16,1,.3,1) both}
+.title span:nth-child(1){animation-delay:.95s}
+.title span:nth-child(2){animation-delay:1.08s}
+.title span:nth-child(3){animation-delay:1.21s}
+@keyframes letterIn{
+  0%{opacity:0;transform:translateY(28px) scale(1.35);filter:blur(14px)}
+  60%{opacity:1;filter:blur(0)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* 故障艺术 */
+.glitch{position:relative}
+.glitch::before,.glitch::after{
+  content:attr(data-text);position:absolute;inset:0;
+  background:none;color:var(--gold-hi);
+  -webkit-background-clip:border-box;background-clip:border-box;
+  opacity:.55;
+}
+.glitch::before{animation:gA 3.4s steps(2,end) infinite;clip-path:inset(0 0 62% 0);color:var(--cyan);mix-blend-mode:screen}
+.glitch::after{animation:gB 2.7s steps(2,end) infinite;clip-path:inset(58% 0 0 0);color:#ff5a3c;mix-blend-mode:screen}
+@keyframes gA{
+  0%,88%,100%{transform:translate(0,0);opacity:0}
+  89%{transform:translate(-6px,-3px);opacity:.75}
+  92%{transform:translate(5px,2px);opacity:.6}
+  95%{transform:translate(-3px,1px);opacity:.7}
+}
+@keyframes gB{
+  0%,84%,100%{transform:translate(0,0);opacity:0}
+  85%{transform:translate(7px,3px);opacity:.7}
+  90%{transform:translate(-5px,-2px);opacity:.55}
+}
+
+/* 副标题 */
+.sub{
+  display:flex;gap:.34em;
+  font-size:min(4.9vw,7.4vh);
+  font-weight:900;letter-spacing:.14em;
+  color:#ffdd9a;
+  text-shadow:0 0 8px rgba(255,190,80,.75),0 0 26px rgba(255,150,20,.42),0 2px 0 rgba(0,0,0,.7);
+}
+.sub span{display:inline-block;animation:subIn .7s cubic-bezier(.16,1,.3,1) both}
+.sub span:nth-child(1){animation-delay:1.45s}
+.sub span:nth-child(2){animation-delay:1.55s}
+.sub span:nth-child(3){animation-delay:1.65s}
+.sub span:nth-child(4){animation-delay:1.75s}
+@keyframes subIn{
+  from{opacity:0;transform:translateY(16px) scale(1.5);letter-spacing:.6em;filter:blur(8px)}
+  to{opacity:1;transform:none;letter-spacing:.14em;filter:blur(0)}
+}
+
+/* 标题下方光带 */
+.bar{
+  width:56%;height:2px;margin-top:1vh;
+  background:linear-gradient(90deg,transparent,var(--gold-hi),var(--gold-deep),transparent);
+  box-shadow:0 0 14px rgba(255,200,90,.9);
+  animation:barIn .8s ease both 1.9s;
+}
+@keyframes barIn{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
+.tag{
+  margin-top:.9vh;font-size:min(1.5vw,1.5vh);letter-spacing:.42em;
+  color:rgba(255,214,130,.75);
+  animation:barIn .8s ease both 2.05s;
+}
+
+/* ---------- HUD ---------- */
+.hud{position:fixed;z-index:8;pointer-events:none;font-size:11px;letter-spacing:.22em;
+  color:rgba(255,214,130,.62);text-shadow:0 0 8px rgba(255,180,60,.4)}
+.h-tl{top:22px;left:24px}
+.h-tr{top:22px;right:24px;text-align:right}
+.h-bl{bottom:22px;left:24px}
+.h-br{bottom:22px;right:24px;text-align:right}
+.hud b{color:var(--gold-hi);font-weight:700}
+.log{line-height:1.85;opacity:.75;font-size:10px}
+.log div{animation:barIn .3s ease both}
+
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#4dff9e;
+  box-shadow:0 0 8px #4dff9e;vertical-align:middle;margin-right:6px;
+  animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ---------- 开机动画 ---------- */
+.boot{
+  position:fixed;inset:0;z-index:20;background:#03040a;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  animation:bootOut .7s ease forwards 1.75s;
+}
+.boot p{font-size:11px;letter-spacing:.36em;color:rgba(255,214,130,.7)}
+.bootline{width:190px;height:1px;background:rgba(255,214,130,.22);overflow:hidden;position:relative}
+.bootline i{position:absolute;top:0;left:0;height:100%;width:40%;
+  background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);
+  animation:bootRun .75s linear infinite}
+@keyframes bootRun{from{left:-40%}to{left:100%}}
+@keyframes bootOut{to{opacity:0;visibility:hidden}}
+
+@media (max-width:760px){
+  .core{width:88vw;height:56vh}
+  .twrap{--fs:26vw}
+  .sub{font-size:8.4vw}
+  .hud{font-size:9px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fx"></canvas>
+<div class="grid"></div>
+<div class="halo"></div>
+
+<main class="core">
+  <div class="frame">
+    <span class="corner c-tl"></span><span class="corner c-tr"></span>
+    <span class="corner c-bl"></span><span class="corner c-br"></span>
+    <div class="ring"></div><div class="ring b"></div>
+
+    <div class="twrap">
+      <div class="tglow"></div>
+      <h1 class="title glitch" data-text="HYX"><span>H</span><span>Y</span><span>X</span></h1>
+      <div class="tshine" aria-hidden="true">HYX</div>
+    </div>
+    <div class="sub"><span>超</span><span>级</span><span>无</span><span>敌</span></div>
+    <div class="bar"></div>
+    <div class="tag">O V E R D R I V E &nbsp;/&nbsp; P R I M E &nbsp; C O R E</div>
+  </div>
+</main>
+
+<div class="sweep"></div>
+<div class="scan"></div>
+<div class="vignette"></div>
+
+<div class="hud h-tl"><span class="dot"></span><b>黄宇轩网站</b> // HYX-PRIME v2.077</div>
+<div class="hud h-tr">STATUS: <b>OVERDRIVE</b><br>POWER <b id="pw">9999</b>+</div>
+<div class="hud h-bl log" id="log"></div>
+<div class="hud h-br">SECTOR <b>Ω-07</b><br>SIGNAL <b id="sg">100</b>%</div>
+
+<div class="boot">
+  <p>黄宇轩网站 · INITIALIZING HYX CORE</p>
+  <div class="bootline"><i></i></div>
+</div>
+
+<script>
+/* ===== 金色粒子网络 ===== */
+const cvs=document.getElementById('fx'),ctx=cvs.getContext('2d');
+let W=0,H=0,P=[];
+function resize(){
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth;H=window.innerHeight;
+  cvs.width=W*dpr;cvs.height=H*dpr;
+  cvs.style.width=W+'px';cvs.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const n=Math.min(96,Math.round(W*H/16000));
+  P=Array.from({length:n},()=>({
+    x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,
+    r:Math.random()*1.6+.6,a:Math.random()*.5+.25,
+    big:Math.random()<.12
+  }));
+}
+resize();
+addEventListener('resize',resize);
+
+let mx=W/2,my=H/2;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+
+function tick(){
+  ctx.clearRect(0,0,W,H);
+  // 连线
+  for(let i=0;i<P.length;i++){
+    const p=P[i];
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<-20)p.x=W+20; if(p.x>W+20)p.x=-20;
+    if(p.y<-20)p.y=H+20; if(p.y>H+20)p.y=-20;
+    for(let j=i+1;j<P.length;j++){
+      const q=P[j],dx=p.x-q.x,dy=p.y-q.y,d2=dx*dx+dy*dy;
+      if(d2<19600){
+        const a=(1-Math.sqrt(d2)/140)*.20;
+        ctx.strokeStyle='rgba(255,206,110,'+a+')';
+        ctx.lineWidth=.6;
+        ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();
+      }
+    }
+  }
+  // 点
+  for(const p of P){
+    const d=Math.hypot(p.x-mx,p.y-my);
+    const boost=d<160?(1-d/160)*1.4:0;
+    const r=p.r+boost*1.6;
+    ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.2832);
+    ctx.fillStyle='rgba(255,225,150,'+(p.a+boost*.5)+')';
+    ctx.shadowBlur=p.big?16:6;ctx.shadowColor='rgba(255,180,50,.9)';
+    ctx.fill();ctx.shadowBlur=0;
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* ===== HUD 数据 ===== */
+const log=document.getElementById('log');
+const lines=['BOOT SEQUENCE OK','GOLD MATRIX ONLINE','QUANTUM SHIELD 100%','AURORA DRIVE ENGAGED','NEURAL LINK STABLE','CORE TEMP 37.2°C'];
+let li=0;
+function pushLog(){
+  const t=new Date();
+  const ts=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0')+':'+String(t.getSeconds()).padStart(2,'0');
+  const d=document.createElement('div');
+  d.textContent='['+ts+'] '+lines[li++%lines.length];
+  log.appendChild(d);
+  if(log.children.length>5)log.removeChild(log.firstChild);
+}
+pushLog();setInterval(pushLog,1600);
+
+const pw=document.getElementById('pw'),sg=document.getElementById('sg');
+setInterval(()=>{pw.textContent=(9500+Math.floor(Math.random()*499));},900);
+setInterval(()=>{sg.textContent=(95+Math.floor(Math.random()*6));},1300);
+
+/* ===== 鼠标视差 ===== */
+const core=document.querySelector('.core');
+let cx=0,cy=0,tx=0,ty=0;
+addEventListener('mousemove',e=>{
+  tx=(e.clientX/W-.5)*14; ty=(e.clientY/H-.5)*14;
+});
+(function loop(){
+  cx+=(tx-cx)*.06; cy+=(ty-cy)*.06;
+  core.style.transform='translate(-50%,-50%) translate('+cx.toFixed(2)+'px,'+cy.toFixed(2)+'px)';
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
